@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Payment;
 
 class PaymentController extends Controller
 {
@@ -17,9 +18,19 @@ class PaymentController extends Controller
             'cvc' => 'required|string',
         ]);
 
-        // For now, we'll just return the validated data.
-        // In a real application, you would process this data,
-        // e.g., store it in a database or interact with a payment gateway.
-        return response()->json($validatedData);
+        // Create a new Payment record
+        $payment = Payment::create($validatedData);
+
+        // Redirect to a route that will display the data, passing the new payment's ID
+        return redirect()->route('payment.show', ['payment' => $payment->id]);
+    }
+
+    public function showPaymentDetails(Payment $payment)
+    {
+        // The $payment variable is automatically injected by Laravel
+        // based on the ID in the route.
+        // No need to fetch from session or manually query the database if using route-model binding.
+
+        return view('payment_details', ['paymentData' => $payment]); // Pass the Payment model instance
     }
 }

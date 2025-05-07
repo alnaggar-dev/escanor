@@ -20,4 +20,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Add this route for the payment endpoint
-Route::post('/payment', [PaymentController::class, 'store']); 
+Route::post('/payment', [PaymentController::class, 'store']);
+
+// Add this for testing API GET requests on the server
+Route::get('/test-route', function () {
+    return response()->json(['message' => 'API GET test successful!']);
+}); 
